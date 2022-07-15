@@ -32,5 +32,10 @@ public enum Shape {
     /**
      * 随机(圆)
      */
-    RANDOM;
+    RANDOM,
+
+    /**
+     * 线
+     */
+    LINE;
 }

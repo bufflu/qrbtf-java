@@ -1,5 +1,7 @@
 package cc.wo66.qrbtf.draw;
 
+import cc.wo66.qrbtf.LineDirection;
+import cc.wo66.qrbtf.Parameters;
 import cc.wo66.qrbtf.Shape;
 import com.google.zxing.qrcode.decoder.Version;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
@@ -8,30 +10,31 @@ import org.apache.commons.lang3.RandomUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 @Data
-public class DataPoint {
+public class DataDraw {
 
     // 放大倍数
     private int multiple;
     // 定位点矩形边长(默认是 7)
-    private final int anchorAreaSide = 7;
+    private static int anchorAreaSide = 7;
 
     // 校正图形中心坐标
     private int[][] alignmentCenters;
 
-    private DataPoint(){
+    private DataDraw(){
     }
 
-    public static DataPoint create(Version version, int multiple) {
-        DataPoint dataPoint = new DataPoint();
-        dataPoint.setMultiple(multiple);
+    public static DataDraw create(Version version, int multiple) {
+        DataDraw dataDraw = new DataDraw();
+        dataDraw.setMultiple(multiple);
 
         // 校正图形的中心线
         int[] alignmentPatternCenters = version.getAlignmentPatternCenters();
         int apcLength = alignmentPatternCenters.length;
         if (apcLength == 0) {
-            return dataPoint;
+            return dataDraw;
         }
 
         // 校正图形的中心点
@@ -47,9 +50,9 @@ public class DataPoint {
                 alignmentCenters[index++] = new int[]{alignmentPatternCenters[i],alignmentPatternCenters[j]};
             }
         }
-        dataPoint.setAlignmentCenters(alignmentCenters);
+        dataDraw.setAlignmentCenters(alignmentCenters);
 
-        return dataPoint;
+        return dataDraw;
     }
 
     private boolean isAlignmentPoint(int x, int y) {
@@ -62,14 +65,14 @@ public class DataPoint {
         return false;
     }
 
-    private boolean isDataPoint(int x, int y, int imageSide) {
-        if (x >= anchorAreaSide && x < imageSide-anchorAreaSide && y >= 0 && y < anchorAreaSide) {
+    public static boolean isDataPoint(int x, int y, int side) {
+        if (x >= anchorAreaSide && x < side-anchorAreaSide && y >= 0 && y < anchorAreaSide) {
             return true;
         }
-        if (x >= 0 && x < imageSide && y >= anchorAreaSide && y < imageSide-anchorAreaSide) {
+        if (x >= 0 && x < side && y >= anchorAreaSide && y < side-anchorAreaSide) {
             return true;
         }
-        if (x >= anchorAreaSide && x < imageSide && y >= imageSide-anchorAreaSide && y < imageSide) {
+        if (x >= anchorAreaSide && x < side && y >= side-anchorAreaSide && y < side) {
             return true;
         }
         return false;
@@ -91,18 +94,47 @@ public class DataPoint {
         return multiple > 20 && margin == 0 ? 1 : 0;
     }
 
-    public void draw(ByteMatrix matrix, BufferedImage image, Shape shape, Color color, int scale, int opacity) {
+    public void draw(ByteMatrix matrix, BufferedImage image, Parameters parameters) {
+        Shape shape = parameters.getDataPointShape();
+        Graphics2D graphics = null;
+        Color color = null;
+
+        if (Shape.LINE == shape) {
+            graphics = image.createGraphics();
+            color = parameters.getLineColor();
+            int lineStroke = parameters.getLineStroke();
+            int lineOpacity = parameters.getLineOpacity();
+            graphics.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 255*lineOpacity/100));
+            graphics.setStroke(new BasicStroke((float)multiple*lineStroke/100, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+
+            drawLine(matrix, graphics, parameters.getLineDirection());
+        }
+
+        if (Shape.CIRCLE == shape || Shape.RANDOM == shape || Shape.RECTANGLE == shape) {
+            color = parameters.getDataPointColor();
+            int opacity = parameters.getDataPointOpacity();
+            int scale = parameters.getDataPointScale();
+            color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 255*opacity/100);
+            if (Shape.RECTANGLE != shape) {
+                graphics = image.createGraphics();
+                graphics.setColor(color);
+            }
+
+            drawNotLine(matrix, image, graphics, shape, color, scale);
+        }
+
+        if (graphics != null) {
+            graphics.dispose();
+        }
+    }
+
+
+    public void drawNotLine(ByteMatrix matrix, BufferedImage image, Graphics2D graphics, Shape shape, Color color, int scale) {
+
         // 原始 QRCode 矩阵宽
         int inputSide = matrix.getWidth();
         // 缩放后的边距
         int scaleMargin = computeScaleMargin(scale);
-        // 重新设置不透明度
-        color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 255*opacity/100);
-
-        Graphics2D graphics = null;
-        if (Shape.CIRCLE == shape || Shape.RANDOM == shape) {
-            graphics = image.createGraphics();
-        }
 
         for (int inputY = 0, outputY = 0; inputY < inputSide; inputY++, outputY += multiple) {
             for (int inputX = 0, outputX = 0; inputX < inputSide; inputX++, outputX += multiple) {
@@ -123,17 +155,17 @@ public class DataPoint {
                         }
 
                     } else if (Shape.CIRCLE == shape || Shape.RANDOM == shape) {
-                        //Graphics2D graphics = image.createGraphics();
-                        graphics.setColor(color);
                         graphics.fillOval(outputX+margin, outputY+margin, multiple-margin*2, multiple-margin*2);
                     }
 
                 }
             }
         }
+    }
 
-        if (graphics != null) {
-            graphics.dispose();
-        }
+
+
+    private void drawLine(ByteMatrix matrix, Graphics2D graphics, LineDirection lineDirection) {
+        LineDraw.create(multiple).draw(matrix, graphics, lineDirection);
     }
 }

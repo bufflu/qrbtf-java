@@ -92,8 +92,9 @@ public class QRBtfUtil {
     public static void print(ByteMatrix bm){
         try {
             int width = bm.getWidth();
-            for (int i = 0; i < width; i++) {
-                for (int j = 0; j < width ; j++) {
+            for (int j = 0; j < width ; j++) {
+                for (int i = 0; i < width; i++) {
+
                     System.out.print(bm.get(i,j) == 1? "*":" ");
                 }
                 System.out.println();
@@ -107,8 +108,9 @@ public class QRBtfUtil {
     public static void print(BufferedImage bm){
         try {
             int width = bm.getWidth();
-            for (int i = 0; i < width; i++) {
-                for (int j = 0; j < width ; j++) {
+            for (int j = 0; j < width ; j++) {
+                for (int i = 0; i < width; i++) {
+
                     System.out.print(bm.getRGB(i,j)==Color.BLACK.getRGB()? "*":" ");
                 }
                 System.out.println();
@@ -134,5 +136,11 @@ public class QRBtfUtil {
         graphics.setColor(Color.blue);
         graphics.fillRect(0,0,image.getWidth(), image.getHeight());
         graphics.dispose();
+    }
+
+    public static void print(java.util.List<int[]> list) {
+        for (int[] ints : list) {
+            System.out.println(ints[0] + " " + ints[1] + " " + ints[2] + " " + ints[3]);
+        }
     }
 }

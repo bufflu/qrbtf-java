@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 @Data
-public class AnchorPoint {
+public class AnchorDraw {
 
     // 起始点(左上)坐标
     private int[] start;
@@ -22,14 +22,14 @@ public class AnchorPoint {
     private final int anchorAreaSide = 7;
 
 
-    private AnchorPoint(int multiple){
+    private AnchorDraw(int multiple){
         this.multiple = multiple;
         start = new int[]{0,0};
         end = new int[]{anchorAreaSide*multiple-1, anchorAreaSide*multiple-1};
     }
 
-    public static AnchorPoint create(int multiple) {
-        return new AnchorPoint(multiple);
+    public static AnchorDraw create(int multiple) {
+        return new AnchorDraw(multiple);
     }
 
     // 当倍数超过 20 增加美观线

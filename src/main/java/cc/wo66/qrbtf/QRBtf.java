@@ -1,6 +1,8 @@
 package cc.wo66.qrbtf;
 
-import cc.wo66.qrbtf.draw.AnchorPoint;
+import cc.wo66.qrbtf.draw.AnchorDraw;
+import cc.wo66.qrbtf.draw.DataDraw;
+import cc.wo66.qrbtf.draw.IconDraw;
 import cc.wo66.qrbtf.renderer.Renderer;
 import cc.wo66.qrbtf.renderer.RendererRect;
 import com.google.zxing.EncodeHintType;
@@ -55,14 +57,13 @@ public class QRBtf {
         QRBtfUtil.fillBackGroundColor(drawImage, parameters.getBackgroundColor());
 
         // 1 定位点 AnchorPoint
-        AnchorPoint.create(multiple).draw(matrix, drawImage, parameters.getAnchorPointShape(), parameters.getAnchorPointColor(),
+        AnchorDraw.create(multiple).draw(matrix, drawImage, parameters.getAnchorPointShape(), parameters.getAnchorPointColor(),
                 parameters.getDataPointScale());
         // 2 数据点 DataPoint
-        //DataPoint.create(version, multiple).draw(matrix, drawImage, parameters.getDataPointShape(), parameters.getDataPointColor(),
-        //        parameters.getDataPointScale(), parameters.getDataPointOpacity());
+        DataDraw.create(version, multiple).draw(matrix, drawImage, parameters);
         // 3 icon IconPoint
-        //IconPoint.create(parameters.getErrorCorrectionLevel(), width, multiple)
-        //        .draw(drawImage, parameters.getIconBase64(), parameters.getIconScale());
+        //IconDraw.create(parameters.getErrorCorrectionLevel(), width, multiple)
+                //.draw(drawImage, parameters.getIconBase64(), parameters.getIconScale());
 
 
         return drawImage;

@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
  * @since 2022-07-12 22:04
  */
 @Data
-public class IconPoint {
+public class IconDraw {
 
     // 放大倍数
     private int multiple;
@@ -29,9 +29,9 @@ public class IconPoint {
     private final float sideThicknessRatio = 5.5f;
 
 
-    private IconPoint(){}
+    private IconDraw(){}
 
-    public static IconPoint create(ErrorCorrectionLevel level, int side, int multiple) {
+    public static IconDraw create(ErrorCorrectionLevel level, int side, int multiple) {
         double correct = 0;
         switch (level) {
             case M: correct = 15; break;
@@ -44,10 +44,10 @@ public class IconPoint {
         iconAreaSide = iconAreaSide%2==0 ? iconAreaSide-1 : iconAreaSide;
         int o = (side - iconAreaSide) / 2;
 
-        IconPoint iconPoint = new IconPoint();
-        iconPoint.setMultiple(multiple);
-        iconPoint.setIconAreaSide(iconAreaSide);
-        return iconPoint;
+        IconDraw iconDraw = new IconDraw();
+        iconDraw.setMultiple(multiple);
+        iconDraw.setIconAreaSide(iconAreaSide);
+        return iconDraw;
     }
 
 
@@ -63,7 +63,6 @@ public class IconPoint {
         if (StringUtils.isBlank(iconBase64) || scale < 5) {
             return;
         }
-
         // 加载图片
         BufferedImage iconImage = QRBtfUtil.createEquilateralImage(iconBase64);
         if (iconImage == null) {
@@ -71,6 +70,8 @@ public class IconPoint {
         }
         // icon 区域大小
         int iconAreaSide = computeScaleSide(scale);
+
+
 
         // 缩放icon
         Image scaleImage = iconImage.getScaledInstance(iconAreaSide, iconAreaSide, Image.SCALE_SMOOTH);

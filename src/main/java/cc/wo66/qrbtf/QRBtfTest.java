@@ -42,15 +42,14 @@ public class QRBtfTest {
 
     public static void main(String[] args) throws Exception {
 
-        String content = "这是一条测试文本，没有任何意义";
+        String content = "hahaha";
 
-        Renderer renderer = Renderer.rect()
+        Renderer renderer = Renderer.line()
                 .adjust()
                 .errorCorrectionLevel(ErrorCorrectionLevel.L)
+                .lineDirection(LineDirection.LOOPBACK)
                 .anchorPointShape(Shape.RECTANGLE)
-                .anchorPointColor(Color.BLUE)
-                .anchorPointShape(Shape.ROUNDED_RECTANGLE)
-                .dataPointScale(0)
+                .lineStroke(100)
                 .end();
         QRBtf qrBtf = new QRBtf(renderer);
         BufferedImage image = qrBtf.encode(content, encodeHint);

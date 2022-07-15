@@ -69,4 +69,24 @@ public class Parameters {
      */
     private Color backgroundColor;
 
+    /**
+     * 连线方向
+     */
+    private LineDirection lineDirection;
+
+    /**
+     * 连线粗细
+     */
+    private int lineStroke = 100;
+
+    /**
+     * 连线不透明度
+     */
+    private int lineOpacity = 100;
+
+    /**
+     * 连线颜色
+     */
+    private Color lineColor;
+
 }

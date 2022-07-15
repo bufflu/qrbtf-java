@@ -72,4 +72,7 @@ public abstract class Renderer{
     public static RendererRound3 round3(){
         return new RendererRound3();
     }
+    public static RendererLine line(){
+        return new RendererLine();
+    }
 }
