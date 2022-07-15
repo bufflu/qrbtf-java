@@ -44,12 +44,15 @@ public class QRBtfTest {
 
         String content = "这是一条测试文本，没有任何意义";
 
-        RendererRect rendererRect = (RendererRect)Renderer.rect()
+        Renderer renderer = Renderer.rect()
                 .adjust()
+                .errorCorrectionLevel(ErrorCorrectionLevel.L)
+                .anchorPointShape(Shape.RECTANGLE)
+                .anchorPointColor(Color.BLUE)
                 .anchorPointShape(Shape.ROUNDED_RECTANGLE)
                 .dataPointScale(0)
                 .end();
-        QRBtf qrBtf = new QRBtf(rendererRect);
+        QRBtf qrBtf = new QRBtf(renderer);
         BufferedImage image = qrBtf.encode(content, encodeHint);
         ImageIO.write(image, "png", new File("/Users/guoxinlu/Desktop/" + System.currentTimeMillis() + ".png"));
         //ImageIO.write(image, "png", new File("C:\\Users\\Administrator\\Desktop\\" + System.currentTimeMillis() + ".png"));
