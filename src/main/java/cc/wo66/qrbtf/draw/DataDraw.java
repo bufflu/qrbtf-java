@@ -186,7 +186,7 @@ public class DataDraw {
         if (func) { // B 函数
             drawNotLine(matrix, image, graphics, shape, color, 40);
 
-            int[][] funcPoint = FuncPoint.getFuncPoint(matrix.getWidth());
+            java.util.List<int[]> funcPoint = FuncPoint.getFuncPoint(matrix.getWidth());
             if (funcPoint == null) {
                 return;
             }
@@ -232,6 +232,34 @@ public class DataDraw {
                             }
                             graphics.drawOval(x * multiple + margin, y * multiple + margin, multiple - margin, multiple - margin);
                         }
+                    }
+                }
+            }
+
+        } else { // A 函数
+            int inputSide = matrix.getWidth();
+            float m = 0.3f/inputSide; // QrCode 中1个单位缩小 30%
+            int centerX = inputSide/2;
+            int centerY = inputSide/2;
+            int margin = 0;
+
+            for (int inputY = 0, outputY = 0; inputY < inputSide; inputY++, outputY += multiple) {
+                for (int inputX = 0, outputX = 0; inputX < inputSide; inputX++, outputX += multiple) {
+                    if (matrix.get(inputX, inputY) == 1 && isDataPoint(inputX, inputY, inputSide)) {
+                        // 靠近中心的点更小
+                        margin = (int)(multiple * m * (inputSide - Math.abs(inputX-centerX) - Math.abs(inputY-centerY)));
+                        if (Shape.RECTANGLE == shape) {
+                            for (int y = outputY+margin; y < outputY+multiple-margin; y++) {
+                                for (int x = outputX+margin; x < outputX+multiple-margin; x++) {
+                                    image.setRGB(x, y, color.getRGB());
+                                }
+                            }
+
+                        }
+                        if (Shape.CIRCLE == shape) {
+                            graphics.fillOval(outputX+margin, outputY+margin, multiple-margin*2, multiple-margin*2);
+                        }
+
                     }
                 }
             }

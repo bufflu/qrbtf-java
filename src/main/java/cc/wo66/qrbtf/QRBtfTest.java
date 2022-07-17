@@ -42,60 +42,16 @@ public class QRBtfTest {
 
     public static void main(String[] args) throws Exception {
 
-        String content = "hahaha";
+        String content = "https://www.wo66.cc";
 
-        Renderer renderer = Renderer.line()
-                .adjust()
-                .errorCorrectionLevel(ErrorCorrectionLevel.L)
-                .lineDirection(LineDirection.LOOPBACK)
-                .anchorPointShape(Shape.RECTANGLE)
-                .lineStroke(100)
+        Renderer renderer = Renderer.funcB().adjust()
+                .dataPointShape(Shape.CIRCLE)
                 .end();
+
         QRBtf qrBtf = new QRBtf(renderer);
         BufferedImage image = qrBtf.encode(content, encodeHint);
-        ImageIO.write(image, "png", new File("/Users/guoxinlu/Desktop/" + System.currentTimeMillis() + ".png"));
-        //ImageIO.write(image, "png", new File("C:\\Users\\Administrator\\Desktop\\" + System.currentTimeMillis() + ".png"));
+        //ImageIO.write(image, "png", new File("/Users/guoxinlu/Desktop/" + System.currentTimeMillis() + ".png"));
+        ImageIO.write(image, "png", new File("C:\\Users\\Administrator\\Desktop\\" + System.currentTimeMillis() + ".png"));
     }
 
-    private static void print(ByteMatrix bm)throws Exception{
-        int width = bm.getWidth();
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < width ; j++) {
-                System.out.print(bm.get(i,j) == 1? "*":" ");
-            }
-            System.out.println();
-        }
-    }
-
-    private static void print(BitMatrix bm)throws Exception{
-        int width = bm.getWidth();
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < width ; j++) {
-                System.out.print(bm.get(i,j)? "*":" ");
-            }
-            System.out.println();
-        }
-    }
-
-    private static void createQrCode() throws Exception{
-        //new QRCodeWriter().encode();
-        BufferedImage bufferedImage = new BufferedImage(1,1,1);
-        Graphics2D graphics = bufferedImage.createGraphics();
-        //graphics.drawOval();
-
-    }
-
-    private static String base64(ByteMatrix matrix) throws Exception{
-        BufferedImage image = new BufferedImage(matrix.getWidth(), matrix.getHeight(), BufferedImage.TYPE_INT_RGB);
-        for (int x = 0; x < matrix.getWidth(); x++) {
-            for (int y = 0; y < matrix.getHeight(); y++) {
-                image.setRGB(x, y, matrix.get(x, y)==1 ? BLACK
-                        : WHITE);
-                //image.createGraphics().drawRoundRect();
-            }
-        }
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", os);
-        return Base64.getEncoder().encodeToString(os.toByteArray());
-    }
 }

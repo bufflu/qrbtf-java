@@ -25,7 +25,7 @@ public class RendererFuncB extends Renderer{
         parameters.setDataPointShape(Shape.CIRCLE);
         parameters.setDataPointScale(50);
         parameters.setDataPointOpacity(100);
-        parameters.setDataPointColor(new Color(60,60,60)); // 颜色太浅扫不出来
+        parameters.setDataPointColor(new Color(60,60,60)); // 如果颜色太浅则扫不出来
         parameters.setFunc(true);
         parameters.setDataPointColor2(Color.BLACK);
     }
