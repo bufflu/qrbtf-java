@@ -24,7 +24,7 @@ public class LineDraw {
     }
 
     // !!! 该方法会导致 matrix 中数据发生修改
-    public void draw(ByteMatrix matrix, Graphics2D graphics, LineDirection lineDirection) {
+    public void draw(ByteMatrix matrix, Graphics2D graphics, LineDirection lineDirection, int lineStroke) {
         java.util.List<int[]> pointList = new ArrayList<>();
 
         if (LineDirection.LEFT_RIGHT == lineDirection) {
@@ -55,8 +55,10 @@ public class LineDraw {
         }
 
         // 针对 Cross 类型做特殊处理
-
-
+        if (LineDirection.CROSS == lineDirection) {
+            drawCross(matrix, graphics, lineStroke, pointList);
+            return;
+        }
         for (int[] point : pointList) {
             // (pointX + 1/2) * multiple 找到线的起点
             graphics.drawLine(point[0]*multiple+multiple/2, point[1]*multiple+multiple/2, point[2]*multiple+multiple/2, point[3]*multiple+multiple/2);
@@ -65,20 +67,34 @@ public class LineDraw {
 
     // 绘制交叉线（和点）
     public void drawCross(ByteMatrix matrix, Graphics2D graphics, int lineStroke, java.util.List<int[]> pointList) {
-        // 画线
+        // 1 画线
         for (int[] point : pointList) {
+            //   基础线宽为正常线宽的 60% ，然后再随机(20\40\60\80\100)%进行缩放
             int r = RandomUtils.nextInt(1, 5);
-            int lineWidth = multiple * lineStroke*r*50/500; // 正常线宽的 1/2 然后再随机(20\40\60\80\100)
-            if (lineWidth < 2) continue;
+            int lineWidth = multiple * lineStroke*r*60/50000;
+            if (lineWidth < 2) {
+                lineWidth = 2;
+            }
             // 设置线宽
             graphics.setStroke(new BasicStroke((float)lineWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-            graphics.drawLine(point[0]*multiple+multiple/2, point[1]*multiple+multiple/2, point[2]*multiple+multiple/2, point[3]*multiple+multiple/2);
+            graphics.drawLine(point[0]*multiple+multiple/2, point[1]*multiple+multiple/2,
+                    point[2]*multiple+multiple/2, point[3]*multiple+multiple/2);
         }
 
-        // 画点 todo
+        // 2 画点
+        //   圆直径随机(40\50\60\70\80)进行缩放
+        graphics.setStroke(new BasicStroke());
+        for (int y = 0; y < matrix.getHeight(); y++) {
+            for (int x = 0; x < matrix.getWidth(); x++) {
+                if (matrix.get(x,y) == 1 && DataDraw.isDataPoint(x,y,matrix.getWidth())) {
+                    int r1 = RandomUtils.nextInt(4, 9);
+                    int d = multiple * r1 / 10;
+                    int margin = (multiple - d) / 2;
+                    graphics.fillOval(x * multiple + margin, y * multiple + margin, d, d);
+                }
+            }
+        }
     }
-
-
 
 
 

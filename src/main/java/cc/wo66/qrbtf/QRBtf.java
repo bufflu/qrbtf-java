@@ -57,13 +57,12 @@ public class QRBtf {
         QRBtfUtil.fillBackGroundColor(drawImage, parameters.getBackgroundColor());
 
         // 1 定位点 AnchorPoint
-        AnchorDraw.create(multiple).draw(matrix, drawImage, parameters.getAnchorPointShape(), parameters.getAnchorPointColor(),
-                parameters.getDataPointScale());
+        AnchorDraw.create(multiple).draw(matrix, drawImage, parameters);
         // 2 数据点 DataPoint
         DataDraw.create(version, multiple).draw(matrix, drawImage, parameters);
         // 3 icon IconPoint
-        //IconDraw.create(parameters.getErrorCorrectionLevel(), width, multiple)
-                //.draw(drawImage, parameters.getIconBase64(), parameters.getIconScale());
+        IconDraw.create(parameters.getErrorCorrectionLevel(), width, multiple)
+                .draw(drawImage, parameters.getIconBase64(), parameters.getIconScale());
 
 
         return drawImage;

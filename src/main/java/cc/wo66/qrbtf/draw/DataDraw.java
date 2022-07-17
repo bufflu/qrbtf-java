@@ -2,6 +2,7 @@ package cc.wo66.qrbtf.draw;
 
 import cc.wo66.qrbtf.LineDirection;
 import cc.wo66.qrbtf.Parameters;
+import cc.wo66.qrbtf.QRBtfUtil;
 import cc.wo66.qrbtf.Shape;
 import com.google.zxing.qrcode.decoder.Version;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
@@ -105,9 +106,11 @@ public class DataDraw {
             int lineStroke = parameters.getLineStroke();
             int lineOpacity = parameters.getLineOpacity();
             graphics.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 255*lineOpacity/100));
-            graphics.setStroke(new BasicStroke((float)multiple*lineStroke/100, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            graphics.setStroke(
+                    new BasicStroke((float)multiple*lineStroke/100, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND)
+            );
 
-            drawLine(matrix, graphics, parameters.getLineDirection());
+            drawLine(matrix, graphics, parameters.getLineDirection(), lineStroke);
         }
 
         if (Shape.CIRCLE == shape || Shape.RANDOM == shape || Shape.RECTANGLE == shape) {
@@ -115,12 +118,21 @@ public class DataDraw {
             int opacity = parameters.getDataPointOpacity();
             int scale = parameters.getDataPointScale();
             color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 255*opacity/100);
+
             if (Shape.RECTANGLE != shape) {
                 graphics = image.createGraphics();
                 graphics.setColor(color);
             }
 
-            drawNotLine(matrix, image, graphics, shape, color, scale);
+            // 无干扰函数
+            if (parameters.getFunc() == null) {
+                drawNotLine(matrix, image, graphics, shape, color, scale);
+
+            } else { // 有干扰函数
+                Color color2 = parameters.getDataPointColor2();
+                boolean func = parameters.getFunc();
+                drawFunc(matrix, image, graphics, func, shape, color, color2);
+            }
         }
 
         if (graphics != null) {
@@ -129,7 +141,8 @@ public class DataDraw {
     }
 
 
-    public void drawNotLine(ByteMatrix matrix, BufferedImage image, Graphics2D graphics, Shape shape, Color color, int scale) {
+    private void drawNotLine(ByteMatrix matrix, BufferedImage image, Graphics2D graphics,
+                             Shape shape, Color color, int scale) {
 
         // 原始 QRCode 矩阵宽
         int inputSide = matrix.getWidth();
@@ -164,8 +177,66 @@ public class DataDraw {
     }
 
 
-
-    private void drawLine(ByteMatrix matrix, Graphics2D graphics, LineDirection lineDirection) {
-        LineDraw.create(multiple).draw(matrix, graphics, lineDirection);
+    private void drawLine(ByteMatrix matrix, Graphics2D graphics, LineDirection lineDirection, int lineStroke) {
+        LineDraw.create(multiple).draw(matrix, graphics, lineDirection, lineStroke);
     }
+
+    private void drawFunc(ByteMatrix matrix, BufferedImage image, Graphics2D graphics,
+                          boolean func, Shape shape, Color color, Color color2) {
+        if (func) { // B 函数
+            drawNotLine(matrix, image, graphics, shape, color, 40);
+
+            int[][] funcPoint = FuncPoint.getFuncPoint(matrix.getWidth());
+            if (funcPoint == null) {
+                return;
+            }
+            int startX, y, l;
+            for (int[] ints : funcPoint) {
+                startX = ints[0];
+                y = ints[1];
+                l = ints[2];
+
+                if (Shape.RECTANGLE == shape) {
+                    for (int x = startX; x < startX + l; x++) {
+                        if (matrix.get(x, y) == 1) {
+                            for (int outputY = y * multiple; outputY < (y + 1) * multiple; outputY++) {
+                                for (int outputX = x * multiple; outputX < (x + 1) * multiple; outputX++) {
+                                    image.setRGB(outputX, outputY, color2.getRGB());
+                                }
+                            }
+                        } else {
+                            int margin = multiple / 10;
+                            for (int outputY = y * multiple; outputY < (y + 1) * multiple; outputY++) {
+                                for (int outputX = x * multiple; outputX < (x + 1) * multiple; outputX++) {
+                                    if (outputY >= y * multiple + margin && outputY < (y + 1) * multiple - margin
+                                            && outputX >= x * multiple + margin && outputX < (x + 1) * multiple - margin) {
+                                        continue;
+                                    }
+                                    image.setRGB(outputX, outputY, color2.getRGB());
+                                }
+                            }
+                        }
+                    }
+                }
+                if (Shape.CIRCLE == shape) {
+                    graphics.setColor(color2);
+                    for (int x = startX; x < startX + l; x++) {
+                        if (matrix.get(x, y) == 1) {
+                            graphics.fillOval(x * multiple, y * multiple, multiple, multiple);
+                        } else {
+                            int margin = multiple / 13;
+                            if (margin > 1) {
+                                graphics.setStroke(new BasicStroke(margin));
+                            } else {
+                                margin = 0;
+                            }
+                            graphics.drawOval(x * multiple + margin, y * multiple + margin, multiple - margin, multiple - margin);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package cc.wo66.qrbtf.draw;
 
+import cc.wo66.qrbtf.Parameters;
 import cc.wo66.qrbtf.QRBtfUtil;
 import cc.wo66.qrbtf.Shape;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
@@ -120,13 +121,15 @@ public class AnchorDraw {
         return outMatrix;
     }
 
-    private int[] drawColor(ByteMatrix matrix, Color color) {
+    private int[] drawColor(ByteMatrix matrix, Color color, Color bgColor) {
         int[] rgbArray = new int[matrix.getHeight()*matrix.getWidth()];
         int index = 0;
         for (int y = 0; y < matrix.getHeight(); y++) {
             for (int x = 0; x < matrix.getWidth(); x++) {
                 if (matrix.get(x,y) == 1) {
                     rgbArray[index] = color.getRGB();
+                } else if (bgColor != null) {
+                    rgbArray[index] = bgColor.getRGB();
                 }
                 index++;
             }
@@ -134,13 +137,16 @@ public class AnchorDraw {
         return rgbArray;
     }
 
-    public void draw(ByteMatrix matrix, BufferedImage image, Shape shape, Color color, int scale) {
-        ByteMatrix byteMatrix = drawShape(matrix, shape, scale);
-        int[] rgbArray = drawColor(byteMatrix, color);
+    public void draw(ByteMatrix matrix, BufferedImage image, Parameters parameters) {
+        ByteMatrix byteMatrix = drawShape(matrix, parameters.getAnchorPointShape(), parameters.getDataPointScale());
+        int[] rgbArray = drawColor(byteMatrix, parameters.getAnchorPointColor(), parameters.getBackgroundColor());
         // 分别绘制左上 - 右上 - 左下
-        image.setRGB(0, 0, byteMatrix.getWidth(), byteMatrix.getHeight(), rgbArray, 0, byteMatrix.getWidth());
-        image.setRGB(image.getWidth()-byteMatrix.getWidth(), 0, byteMatrix.getWidth(), byteMatrix.getHeight(), rgbArray, 0, byteMatrix.getWidth());
-        image.setRGB(0, image.getWidth()-byteMatrix.getWidth(), byteMatrix.getWidth(), byteMatrix.getHeight(), rgbArray, 0, byteMatrix.getWidth());
+        image.setRGB(0, 0,
+                byteMatrix.getWidth(), byteMatrix.getHeight(), rgbArray, 0, byteMatrix.getWidth());
+        image.setRGB(image.getWidth()-byteMatrix.getWidth(), 0,
+                byteMatrix.getWidth(), byteMatrix.getHeight(), rgbArray, 0, byteMatrix.getWidth());
+        image.setRGB(0, image.getWidth()-byteMatrix.getWidth(),
+                byteMatrix.getWidth(), byteMatrix.getHeight(), rgbArray, 0, byteMatrix.getWidth());
     }
 
 }

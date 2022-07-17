@@ -89,4 +89,14 @@ public class Parameters {
      */
     private Color lineColor;
 
+    /**
+     * 干扰函数
+     */
+    private Boolean func;
+
+    /**
+     * 数据点颜色 2
+     */
+    private Color dataPointColor2;
+
 }

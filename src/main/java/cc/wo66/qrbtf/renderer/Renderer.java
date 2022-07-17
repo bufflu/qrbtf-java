@@ -75,4 +75,13 @@ public abstract class Renderer{
     public static RendererLine line(){
         return new RendererLine();
     }
+    public static RendererLine2 line2(){
+        return new RendererLine2();
+    }
+    public static RendererFuncA funcA(){
+        return new RendererFuncA();
+    }
+    public static RendererFuncB funcB(){
+        return new RendererFuncB();
+    }
 }
