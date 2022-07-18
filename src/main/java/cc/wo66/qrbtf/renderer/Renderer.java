@@ -84,4 +84,7 @@ public abstract class Renderer{
     public static RendererFuncB funcB(){
         return new RendererFuncB();
     }
+    public static RendererImage image(){
+        return new RendererImage();
+    }
 }

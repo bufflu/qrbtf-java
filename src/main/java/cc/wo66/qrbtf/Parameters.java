@@ -99,4 +99,9 @@ public class Parameters {
      */
     private Color dataPointColor2;
 
+    /**
+     * 背景图片 base64
+     */
+    private String backgroundImageBase64 = "";
+
 }
