@@ -137,16 +137,32 @@ public class AnchorDraw {
         return rgbArray;
     }
 
+    private void drawColor(ByteMatrix matrix, BufferedImage image, Color color,
+                           int x, int y) {
+        for (int j = 0; j < matrix.getHeight(); j++) {
+            for (int i = 0; i < matrix.getWidth(); i++) {
+                if (matrix.get(i,j) == 1) {
+                    image.setRGB(x+i, y+j, color.getRGB());
+                }
+            }
+        }
+    }
+
     public void draw(ByteMatrix matrix, BufferedImage image, Parameters parameters) {
         ByteMatrix byteMatrix = drawShape(matrix, parameters.getAnchorPointShape(), parameters.getDataPointScale());
-        int[] rgbArray = drawColor(byteMatrix, parameters.getAnchorPointColor(), parameters.getBackgroundColor());
+        //int[] rgbArray = drawColor(byteMatrix, parameters.getAnchorPointColor(), parameters.getBackgroundColor());
         // 分别绘制左上 - 右上 - 左下
-        image.setRGB(0, 0,
-                byteMatrix.getWidth(), byteMatrix.getHeight(), rgbArray, 0, byteMatrix.getWidth());
-        image.setRGB(image.getWidth()-byteMatrix.getWidth(), 0,
-                byteMatrix.getWidth(), byteMatrix.getHeight(), rgbArray, 0, byteMatrix.getWidth());
-        image.setRGB(0, image.getWidth()-byteMatrix.getWidth(),
-                byteMatrix.getWidth(), byteMatrix.getHeight(), rgbArray, 0, byteMatrix.getWidth());
+        //image.setRGB(0, 0,
+        //        byteMatrix.getWidth(), byteMatrix.getHeight(), rgbArray, 0, byteMatrix.getWidth());
+        //image.setRGB(image.getWidth()-byteMatrix.getWidth(), 0,
+        //        byteMatrix.getWidth(), byteMatrix.getHeight(), rgbArray, 0, byteMatrix.getWidth());
+        //image.setRGB(0, image.getWidth()-byteMatrix.getWidth(),
+        //        byteMatrix.getWidth(), byteMatrix.getHeight(), rgbArray, 0, byteMatrix.getWidth());
+
+        // 改进：分别绘制左上 - 右上 - 左下
+        drawColor(byteMatrix, image, parameters.getAnchorPointColor(), 0, 0);
+        drawColor(byteMatrix, image, parameters.getAnchorPointColor(), image.getWidth()-byteMatrix.getWidth(), 0);
+        drawColor(byteMatrix, image, parameters.getAnchorPointColor(), 0, image.getWidth()-byteMatrix.getWidth());
     }
 
 }

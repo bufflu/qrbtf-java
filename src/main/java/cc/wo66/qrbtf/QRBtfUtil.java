@@ -59,7 +59,9 @@ public class QRBtfUtil {
             }
             BufferedImage eImage = new BufferedImage(side, side, image.getType());
             eImage.setData(image.getData(new Rectangle(x, y, side, side)));
-            eImage.createGraphics().draw(new RoundRectangle2D.Double(0, 0, side, side, (double)side/10*2, (double)side/10*2));
+            Graphics2D graphics = eImage.createGraphics();
+            graphics.draw(new RoundRectangle2D.Double(0, 0, side, side, (double)side/10*2, (double)side/10*2));
+            graphics.dispose();
             return eImage;
         } catch (Exception e) {
             e.printStackTrace();

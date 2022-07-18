@@ -1,6 +1,7 @@
 package cc.wo66.qrbtf;
 
 import cc.wo66.qrbtf.draw.AnchorDraw;
+import cc.wo66.qrbtf.draw.BackgroundDraw;
 import cc.wo66.qrbtf.draw.DataDraw;
 import cc.wo66.qrbtf.draw.IconDraw;
 import cc.wo66.qrbtf.renderer.Renderer;
@@ -53,14 +54,15 @@ public class QRBtf {
         int imageWidth = width * multiple;
 
         // 0 绘画板
-        BufferedImage drawImage = createBufferedImage(imageWidth);
-        QRBtfUtil.fillBackGroundColor(drawImage, parameters.getBackgroundColor());
+        BufferedImage drawImage = createDrawImage(imageWidth);
 
-        // 1 定位点 AnchorPoint
+        // 1 背景 Background
+        BackgroundDraw.create(multiple).draw(drawImage, parameters);
+        // 2 定位点 Anchor
         AnchorDraw.create(multiple).draw(matrix, drawImage, parameters);
-        // 2 数据点 DataPoint
+        // 3 数据点 Data
         DataDraw.create(version, multiple).draw(matrix, drawImage, parameters);
-        // 3 icon IconPoint
+        // 4 图标 Icon
         IconDraw.create(parameters.getErrorCorrectionLevel(), width, multiple)
                 .draw(drawImage, parameters.getIconBase64(), parameters.getIconScale());
 
@@ -82,7 +84,7 @@ public class QRBtf {
         return Encoder.encode(contents, errorCorrectionLevel, hints);
     }
 
-    private BufferedImage createBufferedImage(int side) {
+    private BufferedImage createDrawImage(int side) {
         return new BufferedImage(side, side, BufferedImage.TYPE_INT_ARGB);
     }
 

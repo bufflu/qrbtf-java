@@ -44,9 +44,12 @@ public class QRBtfTest {
 
         String content = "https://www.wo66.cc";
 
-        Renderer renderer = Renderer.funcB().adjust()
-                .dataPointShape(Shape.CIRCLE)
+        Renderer renderer = Renderer.image()
+                .adjust()
+                .backgroundImageBase64(iconBase64)
+                .anchorPointShape(Shape.CIRCLE)
                 .end();
+
 
         QRBtf qrBtf = new QRBtf(renderer);
         BufferedImage image = qrBtf.encode(content, encodeHint);

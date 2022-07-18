@@ -98,11 +98,10 @@ public class DataDraw {
     public void draw(ByteMatrix matrix, BufferedImage image, Parameters parameters) {
         Shape shape = parameters.getDataPointShape();
         Graphics2D graphics = null;
-        Color color = null;
 
         if (Shape.LINE == shape) {
             graphics = image.createGraphics();
-            color = parameters.getLineColor();
+            Color color = parameters.getLineColor();
             int lineStroke = parameters.getLineStroke();
             int lineOpacity = parameters.getLineOpacity();
             graphics.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 255*lineOpacity/100));
@@ -114,24 +113,28 @@ public class DataDraw {
         }
 
         if (Shape.CIRCLE == shape || Shape.RANDOM == shape || Shape.RECTANGLE == shape) {
-            color = parameters.getDataPointColor();
+            Color darkColor = parameters.getDataPointColor();
+            Color lightColor = parameters.getDataPointColor2();
             int opacity = parameters.getDataPointOpacity();
             int scale = parameters.getDataPointScale();
-            color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 255*opacity/100);
+            darkColor = new Color(darkColor.getRed(), darkColor.getGreen(), darkColor.getBlue(), 255*opacity/100);
+            if (lightColor != null) {
+                lightColor = new Color(lightColor.getRed(), lightColor.getGreen(), lightColor.getBlue(), 255*opacity/100);
+            }
 
             if (Shape.RECTANGLE != shape) {
                 graphics = image.createGraphics();
-                graphics.setColor(color);
+                graphics.setColor(darkColor);
             }
 
             // 无干扰函数
             if (parameters.getFunc() == null) {
-                drawNotLine(matrix, image, graphics, shape, color, scale);
+                drawNotLine(matrix, image, graphics, shape, darkColor, lightColor, scale);
 
             } else { // 有干扰函数
                 Color color2 = parameters.getDataPointColor2();
                 boolean func = parameters.getFunc();
-                drawFunc(matrix, image, graphics, func, shape, color, color2);
+                drawFunc(matrix, image, graphics, func, shape, darkColor, color2);
             }
         }
 
@@ -142,16 +145,32 @@ public class DataDraw {
 
 
     private void drawNotLine(ByteMatrix matrix, BufferedImage image, Graphics2D graphics,
-                             Shape shape, Color color, int scale) {
+                             Shape shape, Color darkColor, Color lightColor, int scale) {
 
         // 原始 QRCode 矩阵宽
         int inputSide = matrix.getWidth();
         // 缩放后的边距
         int scaleMargin = computeScaleMargin(scale);
+        int rgb;
 
         for (int inputY = 0, outputY = 0; inputY < inputSide; inputY++, outputY += multiple) {
             for (int inputX = 0, outputX = 0; inputX < inputSide; inputX++, outputX += multiple) {
-                if (matrix.get(inputX, inputY) == 1 && isDataPoint(inputX, inputY, inputSide)) {
+                if (isDataPoint(inputX, inputY, inputSide)) {
+
+                    if (matrix.get(inputX, inputY) == 1) {
+                        rgb = darkColor.getRGB();
+                        if (lightColor != null && graphics != null) {
+                            graphics.setColor(darkColor);
+                        }
+                    } else {
+                        if (lightColor == null) {
+                            continue;
+                        }
+                        rgb = lightColor.getRGB();
+                        if (graphics != null) {
+                            graphics.setColor(lightColor);
+                        }
+                    }
 
                     int margin = scaleMargin;
                     // 校正点只进行缩放，不进行随机
@@ -163,7 +182,7 @@ public class DataDraw {
                     if (Shape.RECTANGLE == shape) {
                         for (int y = outputY+margin; y < outputY+multiple-margin-btfLine(margin); y++) {
                             for (int x = outputX+margin; x < outputX+multiple-margin-btfLine(margin); x++) {
-                                image.setRGB(x, y, color.getRGB());
+                                image.setRGB(x, y, rgb);
                             }
                         }
 
@@ -182,9 +201,9 @@ public class DataDraw {
     }
 
     private void drawFunc(ByteMatrix matrix, BufferedImage image, Graphics2D graphics,
-                          boolean func, Shape shape, Color color, Color color2) {
+                          boolean func, Shape shape, Color color, Color funcColor) {
         if (func) { // B 函数
-            drawNotLine(matrix, image, graphics, shape, color, 40);
+            drawNotLine(matrix, image, graphics, shape, color, null, 40);
 
             java.util.List<int[]> funcPoint = FuncPoint.getFuncPoint(matrix.getWidth());
             if (funcPoint == null) {
@@ -201,7 +220,7 @@ public class DataDraw {
                         if (matrix.get(x, y) == 1) {
                             for (int outputY = y * multiple; outputY < (y + 1) * multiple; outputY++) {
                                 for (int outputX = x * multiple; outputX < (x + 1) * multiple; outputX++) {
-                                    image.setRGB(outputX, outputY, color2.getRGB());
+                                    image.setRGB(outputX, outputY, funcColor.getRGB());
                                 }
                             }
                         } else {
@@ -212,14 +231,14 @@ public class DataDraw {
                                             && outputX >= x * multiple + margin && outputX < (x + 1) * multiple - margin) {
                                         continue;
                                     }
-                                    image.setRGB(outputX, outputY, color2.getRGB());
+                                    image.setRGB(outputX, outputY, funcColor.getRGB());
                                 }
                             }
                         }
                     }
                 }
                 if (Shape.CIRCLE == shape) {
-                    graphics.setColor(color2);
+                    graphics.setColor(funcColor);
                     for (int x = startX; x < startX + l; x++) {
                         if (matrix.get(x, y) == 1) {
                             graphics.fillOval(x * multiple, y * multiple, multiple, multiple);

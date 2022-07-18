@@ -51,12 +51,18 @@ public class RendererImageAdjuster {
      * 深色 #000000  ~  #ffffff 浅色，如果深浅色相差不大则扫不出来
      */
     public RendererImageAdjuster dataPointDarkColor(Color dataPointDarkColor) {
+        if (dataPointDarkColor == null) {
+            dataPointDarkColor = Color.BLACK;
+        }
         renderer.getParameters().setDataPointColor(dataPointDarkColor);
         return this;
     }
 
-    public RendererImageAdjuster dataPointLightColor(Color dataPointDarkColor) {
-        renderer.getParameters().setDataPointColor2(dataPointDarkColor);
+    public RendererImageAdjuster dataPointLightColor(Color dataPointLightColor) {
+        if (dataPointLightColor == null) {
+            dataPointLightColor = Color.WHITE;
+        }
+        renderer.getParameters().setDataPointColor2(dataPointLightColor);
         return this;
     }
 
