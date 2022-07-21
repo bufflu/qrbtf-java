@@ -104,4 +104,19 @@ public class Parameters {
      */
     private String backgroundImageBase64 = "";
 
+    /**
+     * 二值化
+     */
+    private boolean binary;
+
+    /**
+     * 曝光
+     */
+    private int exposure = 0;
+
+    /**
+     * 对比度
+     */
+    private int contrast = 0;
+
 }

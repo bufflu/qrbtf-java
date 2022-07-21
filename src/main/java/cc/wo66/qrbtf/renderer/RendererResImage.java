@@ -8,15 +8,15 @@ import java.awt.*;
 
 
 /**
- * ClassName: RendererImage (C1)
+ * ClassName: RendererResImage (C2)
  *
  * @author guoxinlu
- * @since 2022-07-18 14:20
+ * @since 2022-07-21 22:48
  */
-public class RendererImage extends Renderer{
+public class RendererResImage extends Renderer{
 
-    public RendererImage() {
-        style = RendererStyle.IMAGE;
+    public RendererResImage() {
+        style = RendererStyle.RES_IMAGE;
 
         parameters = new Parameters();
         parameters.setErrorCorrectionLevel(ErrorCorrectionLevel.M);
@@ -25,15 +25,17 @@ public class RendererImage extends Renderer{
         parameters.setDataPointShape(Shape.RECTANGLE);
         parameters.setDataPointScale(25);          // 实际缩放 25%
         parameters.setDataPointOpacity(100);
-        parameters.setDataPointColor(Color.BLACK); // 深色
-        parameters.setDataPointColor2(Color.WHITE);// 浅色
+        parameters.setDataPointColor(Color.BLACK);
         parameters.setBackgroundImageBase64("");
+        parameters.setBinary(true); // 二值化
         parameters.setBackgroundColor(Color.WHITE);
+        parameters.setExposure(0);  // 曝光
+        parameters.setContrast(0);  // 对比度
     }
 
     @Override
-    public RendererImageAdjuster adjust() {
-        return new RendererImageAdjuster(this);
+    public RendererResImageAdjuster adjust() {
+        return new RendererResImageAdjuster(this);
     }
 
 }

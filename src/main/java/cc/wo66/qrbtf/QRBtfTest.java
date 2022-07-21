@@ -47,7 +47,7 @@ public class QRBtfTest {
         Renderer renderer = Renderer.image()
                 .adjust()
                 .backgroundImageBase64(iconBase64)
-                .anchorPointShape(Shape.CIRCLE)
+                .anchorPointShape(Shape.RECTANGLE)
                 .end();
 
 

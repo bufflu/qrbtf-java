@@ -87,4 +87,7 @@ public abstract class Renderer{
     public static RendererImage image(){
         return new RendererImage();
     }
+    public static RendererResImage resImage(){
+        return new RendererResImage();
+    }
 }
