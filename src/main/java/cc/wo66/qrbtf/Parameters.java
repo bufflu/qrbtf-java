@@ -105,18 +105,18 @@ public class Parameters {
     private String backgroundImageBase64 = "";
 
     /**
-     * 二值化
+     * 背景增强
      */
-    private boolean binary;
+    private BackgroundEnhance bgEnhance;
 
     /**
-     * 曝光
+     * 亮度
      */
-    private int exposure = 0;
+    private float brightness = 0;
 
     /**
      * 对比度
      */
-    private int contrast = 0;
+    private float contrast = 0;
 
 }

@@ -1,5 +1,6 @@
 package cc.wo66.qrbtf.renderer;
 
+import cc.wo66.qrbtf.BackgroundEnhance;
 import cc.wo66.qrbtf.Parameters;
 import cc.wo66.qrbtf.Shape;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
@@ -26,11 +27,12 @@ public class RendererResImage extends Renderer{
         parameters.setDataPointScale(25);          // 实际缩放 25%
         parameters.setDataPointOpacity(100);
         parameters.setDataPointColor(Color.BLACK);
+        parameters.setDataPointColor2(Color.WHITE);
         parameters.setBackgroundImageBase64("");
-        parameters.setBinary(true); // 二值化
+        parameters.setBgEnhance(BackgroundEnhance.BINARIZATION); // 二值化
         parameters.setBackgroundColor(Color.WHITE);
-        parameters.setExposure(0);  // 曝光
-        parameters.setContrast(0);  // 对比度
+        parameters.setBrightness(1f);  // 亮度
+        parameters.setContrast(1f);    // 对比度
     }
 
     @Override

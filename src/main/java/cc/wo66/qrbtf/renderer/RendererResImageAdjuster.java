@@ -1,5 +1,6 @@
 package cc.wo66.qrbtf.renderer;
 
+import cc.wo66.qrbtf.BackgroundEnhance;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.awt.*;
@@ -60,35 +61,25 @@ public class RendererResImageAdjuster {
         if (backgroundImageBase64 == null) {
             backgroundImageBase64 = "";
         }
-        renderer.getParameters().setBinary(true);
+        renderer.getParameters().setBgEnhance(BackgroundEnhance.BINARIZATION);
         renderer.getParameters().setBackgroundImageBase64(backgroundImageBase64);
         return this;
     }
 
     /**
-     * 曝光
+     * 亮度 建议 -3.0f ~ 3.0f
+     * 默认 1.0f
      */
-    public RendererResImageAdjuster exposure(int exposure) {
-        if (exposure > 100) {
-            exposure = 100;
-        }
-        if (exposure < 0) {
-            exposure = 0;
-        }
-        renderer.getParameters().setExposure(exposure);
+    public RendererResImageAdjuster brightness(float brightness) {
+        renderer.getParameters().setBrightness(brightness);
         return this;
     }
 
     /**
-     * 对比度
+     * 对比度  -100.0f ~ 100.0f
+     * 默认 1.0f
      */
-    public RendererResImageAdjuster contrast(int contrast) {
-        if (contrast > 100) {
-            contrast = 100;
-        }
-        if (contrast < 0) {
-            contrast = 0;
-        }
+    public RendererResImageAdjuster contrast(float contrast) {
         renderer.getParameters().setContrast(contrast);
         return this;
     }
