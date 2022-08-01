@@ -125,8 +125,8 @@ public class QRBtfUtil {
     public static void write(BufferedImage image) {
         try {
             //C:\\Users\\Administrator\\Desktop\\
-            //ImageIO.write(image, "png", new File("/Users/guoxinlu/Desktop/" + System.currentTimeMillis() + ".png"));
-            ImageIO.write(image, "png", new File("C:\\Users\\Administrator\\Desktop\\" + System.currentTimeMillis() + ".png"));
+            ImageIO.write(image, "png", new File("/Users/guoxinlu/Desktop/" + System.currentTimeMillis() + ".png"));
+            //ImageIO.write(image, "png", new File("C:\\Users\\Administrator\\Desktop\\" + System.currentTimeMillis() + ".png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

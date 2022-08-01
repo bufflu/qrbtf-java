@@ -58,12 +58,12 @@ public class ImageFilter {
         return this;
     }
 
-    public void outColor(BufferedImage image) {
-        out(image, true);
+    public BufferedImage outColor(BufferedImage image) {
+        return out(image, true);
     }
 
-    public void outGray(BufferedImage image) {
-        out(image, false);
+    public BufferedImage outGray(BufferedImage image) {
+        return out(image, false);
     }
 
     public BufferedImage out(BufferedImage image, boolean isColor) {

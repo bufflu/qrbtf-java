@@ -62,8 +62,8 @@ public class QRBtfTest {
 
         QRBtf qrBtf = new QRBtf(renderer);
         BufferedImage image = qrBtf.encode(content, encodeHint);
-        //ImageIO.write(image, "png", new File("/Users/guoxinlu/Desktop/" + System.currentTimeMillis() + ".png"));
-        ImageIO.write(image, "png", new File("C:\\Users\\Administrator\\Desktop\\" + System.currentTimeMillis() + ".png"));
+        ImageIO.write(image, "png", new File("/Users/guoxinlu/Desktop/" + System.currentTimeMillis() + ".png"));
+        //ImageIO.write(image, "png", new File("C:\\Users\\Administrator\\Desktop\\" + System.currentTimeMillis() + ".png"));
     }
 
 }

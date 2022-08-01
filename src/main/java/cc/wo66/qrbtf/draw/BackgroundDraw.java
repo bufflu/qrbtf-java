@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class BackgroundDraw {
     
@@ -80,16 +81,46 @@ public class BackgroundDraw {
 
     // 增强处理
     private void pixelEnhance(BufferedImage image, Parameters parameters) {
-        if (parameters.getBgEnhance() == null) {
+        List<BackgroundEnhance> bgEnhance = parameters.getBgEnhance();
+        if (parameters.getBgEnhance() == null || parameters.getBgEnhance().isEmpty()) {
             return;
         }
-        // 调整对比度与亮度，然后二值化输出  todo
-        if (BackgroundEnhance.BINARIZATION == parameters.getBgEnhance()) {
-            ImageFilter.create(image)
+        BufferedImage binaryImage = image;
+
+        // 调整对比度与亮度，然后二值化输出
+        if (bgEnhance.contains(BackgroundEnhance.BINARY)) {
+            binaryImage = ImageFilter.create(image)
                     .filter(new ConBriFilter(parameters.getContrast(), parameters.getBrightness()))
                     .filter(new BinaryFilter())
-                    .outGray(image);
+                    .outGray(null);
+        }
+        // 像素风格 默认 33% 大小
+        if (bgEnhance.contains(BackgroundEnhance.PIXEL)) {
+            int[] avgW = average(); // 寻找等分点
+            for (int y = 0; y < binaryImage.getHeight(); y+=multiple) {
+                for (int x = 0; x < binaryImage.getWidth(); x+=multiple) {
+                    for (int j = y, aj = 0; aj < 3; j+=avgW[aj++]) {
+                        for (int i = x, ai = 0; ai < 3; i+=avgW[ai++]) {
+                            int rgb = binaryImage.getRGB(i, j);
+                            for (int k = j; k < j+avgW[aj] && k<y+multiple && j<binaryImage.getHeight(); k++) {
+                                for (int l = i; l < i+avgW[ai] && l<x+multiple && i<binaryImage.getWidth(); l++) {
+                                    image.setRGB(l,k,rgb);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
+    }
+
+    private int[] average() {
+        int w = multiple/3;
+        switch (multiple%3) {
+            case 1: return new int[]{w+1,w,w};
+            case 2: return new int[]{w+1,w+1,w};
+            default: return new int[]{w,w,w};
+        }
     }
 }

@@ -4,6 +4,7 @@ import cc.wo66.qrbtf.BackgroundEnhance;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.awt.*;
+import java.util.Arrays;
 
 public class RendererResImageAdjuster {
 
@@ -61,7 +62,7 @@ public class RendererResImageAdjuster {
         if (backgroundImageBase64 == null) {
             backgroundImageBase64 = "";
         }
-        renderer.getParameters().setBgEnhance(BackgroundEnhance.BINARIZATION);
+        renderer.getParameters().setBgEnhance(Arrays.asList(BackgroundEnhance.BINARY, BackgroundEnhance.PIXEL));
         renderer.getParameters().setBackgroundImageBase64(backgroundImageBase64);
         return this;
     }

@@ -107,7 +107,7 @@ public class Parameters {
     /**
      * 背景增强
      */
-    private BackgroundEnhance bgEnhance;
+    private java.util.List<BackgroundEnhance> bgEnhance;
 
     /**
      * 亮度

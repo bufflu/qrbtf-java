@@ -8,6 +8,7 @@ package cc.wo66.qrbtf;
  */
 public enum BackgroundEnhance {
 
-    BINARIZATION,
-    GIF,
+    BINARY, // 二值化
+    PIXEL,  // 像素风格
+    GIF,    // gif图
 }

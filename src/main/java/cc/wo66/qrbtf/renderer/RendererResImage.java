@@ -6,6 +6,7 @@ import cc.wo66.qrbtf.Shape;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.awt.*;
+import java.util.Arrays;
 
 
 /**
@@ -24,12 +25,12 @@ public class RendererResImage extends Renderer{
         parameters.setAnchorPointShape(Shape.RECTANGLE);
         parameters.setAnchorPointColor(Color.BLACK);
         parameters.setDataPointShape(Shape.RECTANGLE);
-        parameters.setDataPointScale(25);          // 实际缩放 25%
+        parameters.setDataPointScale(33);          // 实际缩放 25%
         parameters.setDataPointOpacity(100);
         parameters.setDataPointColor(Color.BLACK);
         parameters.setDataPointColor2(Color.WHITE);
         parameters.setBackgroundImageBase64("");
-        parameters.setBgEnhance(BackgroundEnhance.BINARIZATION); // 二值化
+        parameters.setBgEnhance(Arrays.asList(BackgroundEnhance.BINARY, BackgroundEnhance.PIXEL)); // 二值化
         parameters.setBackgroundColor(Color.WHITE);
         parameters.setBrightness(1f);  // 亮度
         parameters.setContrast(1f);    // 对比度
