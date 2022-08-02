@@ -34,11 +34,11 @@ public class AnchorDraw {
     }
 
     // 当倍数超过 20 增加美观线
-    private int btfLine() {
-        return multiple > 20 ? 1 : 0;
+    private int btfLine(boolean b) {
+        return b && multiple > 20 ? 1 : 0;
     }
 
-    private ByteMatrix drawShape(ByteMatrix matrix, Shape shape, int scale) {
+    private ByteMatrix drawShape(ByteMatrix matrix, Shape shape, int scale, boolean bLine) {
         int inputSide = anchorAreaSide;
         int outputSide = anchorAreaSide*multiple;
         ByteMatrix outMatrix = null;
@@ -48,8 +48,8 @@ public class AnchorDraw {
             for (int inputY = 0, outputY = 0; inputY < inputSide; inputY++, outputY += multiple) {
                 for (int inputX = 0, outputX = 0; inputX < inputSide; inputX++, outputX += multiple) {
                     if (matrix.get(inputX, inputY) == 1) {
-                        for (int y = outputY; y < outputY+multiple-btfLine(); y++) {
-                            for (int x = outputX; x < outputX+multiple-btfLine(); x++) {
+                        for (int y = outputY; y < outputY+multiple-btfLine(bLine); y++) {
+                            for (int x = outputX; x < outputX+multiple-btfLine(bLine); x++) {
                                 outMatrix.set(x, y, 1);
                             }
                         }
@@ -137,32 +137,31 @@ public class AnchorDraw {
         return rgbArray;
     }
 
-    private void drawColor(ByteMatrix matrix, BufferedImage image, Color color,
+    private void drawColor(ByteMatrix matrix, BufferedImage image, Color darkColor, Color lightColor,
                            int x, int y) {
         for (int j = 0; j < matrix.getHeight(); j++) {
             for (int i = 0; i < matrix.getWidth(); i++) {
-                if (matrix.get(i,j) == 1) {
-                    image.setRGB(x+i, y+j, color.getRGB());
+                if (matrix.get(i,j) == 1 && darkColor != null) {
+                    image.setRGB(x+i, y+j, darkColor.getRGB());
+                }
+                if (matrix.get(i,j) == 0 && lightColor != null) {
+                    image.setRGB(x+i, y+j, lightColor.getRGB());
                 }
             }
         }
     }
 
     public void draw(ByteMatrix matrix, BufferedImage image, Parameters parameters) {
-        ByteMatrix byteMatrix = drawShape(matrix, parameters.getAnchorPointShape(), parameters.getDataPointScale());
-        //int[] rgbArray = drawColor(byteMatrix, parameters.getAnchorPointColor(), parameters.getBackgroundColor());
-        // 分别绘制左上 - 右上 - 左下
-        //image.setRGB(0, 0,
-        //        byteMatrix.getWidth(), byteMatrix.getHeight(), rgbArray, 0, byteMatrix.getWidth());
-        //image.setRGB(image.getWidth()-byteMatrix.getWidth(), 0,
-        //        byteMatrix.getWidth(), byteMatrix.getHeight(), rgbArray, 0, byteMatrix.getWidth());
-        //image.setRGB(0, image.getWidth()-byteMatrix.getWidth(),
-        //        byteMatrix.getWidth(), byteMatrix.getHeight(), rgbArray, 0, byteMatrix.getWidth());
+        ByteMatrix byteMatrix = drawShape(matrix, parameters.getAnchorPointShape(), parameters.getDataPointScale(),
+                parameters.isBeautifulLine());
 
         // 改进：分别绘制左上 - 右上 - 左下
-        drawColor(byteMatrix, image, parameters.getAnchorPointColor(), 0, 0);
-        drawColor(byteMatrix, image, parameters.getAnchorPointColor(), image.getWidth()-byteMatrix.getWidth(), 0);
-        drawColor(byteMatrix, image, parameters.getAnchorPointColor(), 0, image.getWidth()-byteMatrix.getWidth());
+        drawColor(byteMatrix, image, parameters.getAnchorPointColor(), parameters.getAnchorPointColor2(), 0, 0);
+        drawColor(byteMatrix, image, parameters.getAnchorPointColor(), parameters.getAnchorPointColor2(),
+                image.getWidth()-byteMatrix.getWidth(), 0);
+        drawColor(byteMatrix, image, parameters.getAnchorPointColor(), parameters.getAnchorPointColor2(),
+                0, image.getWidth()-byteMatrix.getWidth());
+        //QRBtfUtil.write(image);
     }
 
 }

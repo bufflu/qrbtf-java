@@ -90,4 +90,7 @@ public abstract class Renderer{
     public static RendererResImage resImage(){
         return new RendererResImage();
     }
+    public static RendererFillImage fillImage(){
+        return new RendererFillImage();
+    }
 }

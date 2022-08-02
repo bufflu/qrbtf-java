@@ -28,7 +28,7 @@ public class RendererImage extends Renderer{
         parameters.setDataPointColor(Color.BLACK); // 深色
         parameters.setDataPointColor2(Color.WHITE);// 浅色
         parameters.setBackgroundImageBase64("");
-        parameters.setBackgroundColor(Color.WHITE);
+        parameters.setAnchorArea(true);
     }
 
     @Override

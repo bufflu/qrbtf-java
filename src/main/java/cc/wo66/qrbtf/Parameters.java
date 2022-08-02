@@ -30,9 +30,19 @@ public class Parameters {
     private Shape anchorPointShape;
 
     /**
-     * 定位点颜色
+     * 定位点颜色(深色) 主色
      */
     private Color anchorPointColor;
+
+    /**
+     * 定位点颜色(浅色)
+     */
+    private Color anchorPointColor2;
+
+    /**
+     * 美观线(矩形块的分割线)
+     */
+    private boolean beautifulLine = true;
 
     /**
      * 信息点样式
@@ -50,9 +60,14 @@ public class Parameters {
     private int dataPointOpacity = 100;
 
     /**
-     * 信息点颜色
+     * 信息点颜色（主色 或 深色）
      */
     private Color dataPointColor;
+
+    /**
+     * 信息点颜色 2 (浅色 或 第二种信息点颜色)
+     */
+    private Color dataPointColor2;
 
     /**
      * 图标 Base64 编码后的字符串
@@ -63,11 +78,6 @@ public class Parameters {
      * 图标缩放
      */
     private int iconScale = 100;
-
-    /**
-     * 背景色
-     */
-    private Color backgroundColor;
 
     /**
      * 连线方向
@@ -95,14 +105,19 @@ public class Parameters {
     private Boolean func;
 
     /**
-     * 数据点颜色 2
+     * 干扰点颜色
      */
-    private Color dataPointColor2;
+    private Color funcColor;
 
     /**
      * 背景图片 base64
      */
     private String backgroundImageBase64 = "";
+
+    /**
+     * 定位区域留白 C1 样式独有
+     */
+    private boolean anchorArea;
 
     /**
      * 背景增强
@@ -118,5 +133,15 @@ public class Parameters {
      * 对比度
      */
     private float contrast = 0;
+
+    /**
+     * 覆盖颜色
+     */
+    private Color coverColor;
+
+    /**
+     * 覆盖不透明度
+     */
+    private int coverOpacity = 100;
 
 }

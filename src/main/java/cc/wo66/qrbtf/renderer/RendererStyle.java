@@ -24,7 +24,9 @@ public enum RendererStyle {
     CIRCLE("SP-3"),
     N_25D("B1"),
     IMAGE("C1"),
-    RES_IMAGE("C2");
+    RES_IMAGE("C2"),
+    FILL_IMAGE("C3");
+
 
     private final String showName;
 

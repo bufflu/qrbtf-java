@@ -9,8 +9,8 @@ package cc.wo66.qrbtf.filter;
  */
 public class ConBriFilter implements Filter{
 
-    private float contrast = 1.2f; // default value;
-    private float brightness = 0.7f; // default value;
+    private float contrast = 1.2f;
+    private float brightness = 0.7f;
 
     public ConBriFilter(){}
 

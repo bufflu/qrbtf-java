@@ -48,11 +48,9 @@ public class QRBtfTest {
 
         String content = "https://www.wo66.cc";
 
-        Renderer renderer = Renderer.resImage()
+        Renderer renderer = Renderer.fillImage()
                 .adjust()
                 .backgroundImageBase64(bgBase64)
-                .brightness(1f)
-                .contrast(1f)
                 .end();
         /*Renderer renderer = Renderer.image()
                 .adjust()

@@ -46,19 +46,19 @@ public class BackgroundDraw {
             graphics.dispose();
 
             // 优先使用背景图
-            parameters.setBackgroundColor(null);
+            //parameters.setBackgroundColor(null);
 
         }
+        //QRBtfUtil.write(image);
 
-        // 2 填充背景色
-        if (parameters.getBackgroundColor() != null) {
-            QRBtfUtil.fillBackGroundColor(image, parameters.getBackgroundColor());
-        }
     }
 
 
     private void reserveAnchorArea(Graphics2D graphics, BufferedImage image, Parameters parameters) {
-        graphics.setColor(parameters.getBackgroundColor());
+        if (!parameters.isAnchorArea()) {
+            return;
+        }
+        graphics.setColor(Color.WHITE);
         if (Shape.RECTANGLE == parameters.getAnchorPointShape()) {
             int side = anchorAreaBackGroundSide*multiple;
             graphics.fillRect(0, 0, side, side);

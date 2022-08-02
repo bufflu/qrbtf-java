@@ -31,7 +31,7 @@ public class RendererResImage extends Renderer{
         parameters.setDataPointColor2(Color.WHITE);
         parameters.setBackgroundImageBase64("");
         parameters.setBgEnhance(Arrays.asList(BackgroundEnhance.BINARY, BackgroundEnhance.PIXEL)); // 二值化
-        parameters.setBackgroundColor(Color.WHITE);
+        parameters.setAnchorPointColor2(Color.WHITE);
         parameters.setBrightness(1f);  // 亮度
         parameters.setContrast(1f);    // 对比度
     }

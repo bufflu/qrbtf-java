@@ -11,7 +11,6 @@ import org.apache.commons.lang3.RandomUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 @Data
 public class DataDraw {
@@ -91,8 +90,8 @@ public class DataDraw {
     }
 
     // 当倍数超过 20 增加美观线
-    private int btfLine(int margin) {
-        return multiple > 20 && margin == 0 ? 1 : 0;
+    private int btfLine(int margin, boolean b) {
+        return b && multiple > 20 && margin == 0 ? 1 : 0;
     }
 
     public void draw(ByteMatrix matrix, BufferedImage image, Parameters parameters) {
@@ -117,7 +116,9 @@ public class DataDraw {
             Color lightColor = parameters.getDataPointColor2();
             int opacity = parameters.getDataPointOpacity();
             int scale = parameters.getDataPointScale();
-            darkColor = new Color(darkColor.getRed(), darkColor.getGreen(), darkColor.getBlue(), 255*opacity/100);
+            if (darkColor != null) {
+                darkColor = new Color(darkColor.getRed(), darkColor.getGreen(), darkColor.getBlue(), 255 * opacity / 100);
+            }
             if (lightColor != null) {
                 lightColor = new Color(lightColor.getRed(), lightColor.getGreen(), lightColor.getBlue(), 255*opacity/100);
             }
@@ -129,12 +130,13 @@ public class DataDraw {
 
             // 无干扰函数
             if (parameters.getFunc() == null) {
-                drawNotLine(matrix, image, graphics, shape, darkColor, lightColor, scale);
+                boolean bLine = parameters.isBeautifulLine();
+                drawNotLine(matrix, image, graphics, shape, darkColor, lightColor, scale, bLine);
 
             } else { // 有干扰函数
-                Color color2 = parameters.getDataPointColor2();
+                Color funcColor = parameters.getFuncColor();
                 boolean func = parameters.getFunc();
-                drawFunc(matrix, image, graphics, func, shape, darkColor, color2);
+                drawFunc(matrix, image, graphics, func, shape, darkColor, funcColor);
             }
         }
 
@@ -145,7 +147,7 @@ public class DataDraw {
 
 
     private void drawNotLine(ByteMatrix matrix, BufferedImage image, Graphics2D graphics,
-                             Shape shape, Color darkColor, Color lightColor, int scale) {
+                             Shape shape, Color darkColor, Color lightColor, int scale, boolean bLine) {
 
         // 原始 QRCode 矩阵宽
         int inputSide = matrix.getWidth();
@@ -158,6 +160,9 @@ public class DataDraw {
                 if (isDataPoint(inputX, inputY, inputSide)) {
 
                     if (matrix.get(inputX, inputY) == 1) {
+                        if (darkColor == null) {
+                            continue;
+                        }
                         rgb = darkColor.getRGB();
                         if (lightColor != null && graphics != null) {
                             graphics.setColor(darkColor);
@@ -180,8 +185,8 @@ public class DataDraw {
                     }
 
                     if (Shape.RECTANGLE == shape) {
-                        for (int y = outputY+margin; y < outputY+multiple-margin-btfLine(margin); y++) {
-                            for (int x = outputX+margin; x < outputX+multiple-margin-btfLine(margin); x++) {
+                        for (int y = outputY+margin; y < outputY+multiple-margin-btfLine(margin, bLine); y++) {
+                            for (int x = outputX+margin; x < outputX+multiple-margin-btfLine(margin, bLine); x++) {
                                 image.setRGB(x, y, rgb);
                             }
                         }
@@ -203,7 +208,7 @@ public class DataDraw {
     private void drawFunc(ByteMatrix matrix, BufferedImage image, Graphics2D graphics,
                           boolean func, Shape shape, Color color, Color funcColor) {
         if (func) { // B 函数
-            drawNotLine(matrix, image, graphics, shape, color, null, 40);
+            drawNotLine(matrix, image, graphics, shape, color, null, 40, false);
 
             java.util.List<int[]> funcPoint = FuncPoint.getFuncPoint(matrix.getWidth());
             if (funcPoint == null) {

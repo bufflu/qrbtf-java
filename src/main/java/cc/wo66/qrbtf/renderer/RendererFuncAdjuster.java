@@ -53,8 +53,11 @@ public class RendererFuncAdjuster {
         return this;
     }
 
-    public RendererFuncAdjuster dataPointColor2(Color dataPointColor2) {
-        renderer.getParameters().setDataPointColor2(dataPointColor2);
+    /**
+     * 干扰函数点的颜色
+     */
+    public RendererFuncAdjuster funcColor(Color funcColor) {
+        renderer.getParameters().setFuncColor(funcColor);
         return this;
     }
 
@@ -78,7 +81,8 @@ public class RendererFuncAdjuster {
     }
 
     public RendererFuncAdjuster backgroundColor(Color backgroundColor) {
-        renderer.getParameters().setBackgroundColor(backgroundColor);
+        renderer.getParameters().setAnchorPointColor2(backgroundColor);
+        renderer.getParameters().setDataPointColor2(backgroundColor);
         return this;
     }
 

@@ -62,7 +62,8 @@ public class RendererLineAdjuster {
     }
 
     public RendererLineAdjuster backgroundColor(Color backgroundColor) {
-        renderer.getParameters().setBackgroundColor(backgroundColor);
+        renderer.getParameters().setAnchorPointColor2(backgroundColor);
+        renderer.getParameters().setDataPointColor2(backgroundColor);
         return this;
     }
 
