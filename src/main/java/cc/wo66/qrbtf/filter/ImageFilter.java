@@ -58,24 +58,32 @@ public class ImageFilter {
         return this;
     }
 
-    public BufferedImage outColor(BufferedImage image) {
-        return out(image, true);
+    public void outColor(BufferedImage image, int alpha) {
+        out(image, true, alpha);
     }
 
-    public BufferedImage outGray(BufferedImage image) {
-        return out(image, false);
+    public BufferedImage outColor(int alpha) {
+        return out(null, true, alpha);
     }
 
-    public BufferedImage out(BufferedImage image, boolean isColor) {
+    public void outGray(BufferedImage image) {
+        out(image, false, 255);
+    }
+
+    public BufferedImage outGray() {
+        return out(null, false, 255);
+    }
+
+    public BufferedImage out(BufferedImage image, boolean isColor, int alpha) {
         if (image == null) {
             image = new BufferedImage(imageData.getWidth(), imageData.getHeight(), BufferedImage.TYPE_INT_ARGB);
         }
         int[] pixels = new int[imageData.getWidth() * imageData.getHeight()];
         for (int i = 0; i < pixels.length; i++) {
             if (isColor) {
-                pixels[i] = 0xff000000 | ((imageData.getR()[i] & 0xff) << 16) | ((imageData.getG()[i] & 0xff) << 8) | imageData.getB()[i] & 0xff;
+                pixels[i] = ((alpha & 0xff) << 24) | ((imageData.getR()[i] & 0xff) << 16) | ((imageData.getG()[i] & 0xff) << 8) | imageData.getB()[i] & 0xff;
             } else {
-                pixels[i] = 0xff000000 | ((imageData.getGray()[i]&0xff)<<16) | ((imageData.getGray()[i]&0xff)<<8) | imageData.getGray()[i]&0xff;
+                pixels[i] = ((alpha & 0xff) << 24) | ((imageData.getGray()[i]&0xff)<<16) | ((imageData.getGray()[i]&0xff)<<8) | imageData.getGray()[i]&0xff;
             }
         }
         image.setRGB(0, 0, imageData.getWidth(), imageData.getHeight(), pixels, 0, imageData.getWidth());

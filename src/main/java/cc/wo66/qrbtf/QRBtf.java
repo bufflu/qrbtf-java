@@ -49,7 +49,7 @@ public class QRBtf {
 
         ByteMatrix matrix = qrCode.getMatrix();
         int width = matrix.getWidth();
-        int multiple = width; //todo 放大倍数有待考虑
+        int multiple = width; // todo 放大倍数有待考虑
         // 图像大小   如原始矩阵为 25*25 那么图像像素点应为 (25*25) * (25*25), 这么做是为了清晰度以及更好进行缩放
         int imageWidth = width * multiple;
 

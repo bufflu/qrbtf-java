@@ -1,8 +1,11 @@
 package cc.wo66.qrbtf.renderer;
 
+import cc.wo66.qrbtf.BackgroundEnhance;
+import cc.wo66.qrbtf.filter.ColorStyle;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.awt.*;
+import java.util.Arrays;
 
 public class RendererFillImageAdjuster {
 
@@ -25,10 +28,15 @@ public class RendererFillImageAdjuster {
     }
 
     /**
-     * 覆盖颜色
+     * 滤镜风格
+     * @see ColorStyle
+     * 这里和 qrbtf.com 的实现不同，由覆盖颜色转为滤镜风格
      */
-    public RendererFillImageAdjuster coverColor(Color coverColor) {
-        renderer.getParameters().setCoverColor(coverColor);
+    public RendererFillImageAdjuster coverColorStyle(Integer colorStyle) {
+        if (colorStyle != null) {
+            renderer.getParameters().setCoverColorStyle(colorStyle);
+            renderer.getParameters().setBgEnhance(Arrays.asList(BackgroundEnhance.COLOR_FILTER));
+        }
         return this;
     }
 

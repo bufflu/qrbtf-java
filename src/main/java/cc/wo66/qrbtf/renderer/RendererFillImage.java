@@ -1,10 +1,12 @@
 package cc.wo66.qrbtf.renderer;
 
+import cc.wo66.qrbtf.BackgroundEnhance;
 import cc.wo66.qrbtf.Parameters;
 import cc.wo66.qrbtf.Shape;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.awt.*;
+import java.util.Arrays;
 
 
 /**
@@ -21,14 +23,13 @@ public class RendererFillImage extends Renderer{
         parameters = new Parameters();
         parameters.setErrorCorrectionLevel(ErrorCorrectionLevel.M);
         parameters.setAnchorPointShape(Shape.RECTANGLE);
-        parameters.setAnchorPointColor(null); // 透明
+        parameters.setAnchorPointColor(null);      // 默认透明
         parameters.setAnchorPointColor2(Color.WHITE);
         parameters.setDataPointShape(Shape.RECTANGLE);
-        parameters.setDataPointColor(null);  // 透明
+        parameters.setDataPointColor(null);        // 默认透明
         parameters.setDataPointColor2(Color.WHITE);// 浅色
         parameters.setBackgroundImageBase64("");
-        parameters.setCoverColor(null);
-        parameters.setCoverOpacity(100);
+        parameters.setCoverOpacity(60);
         parameters.setBeautifulLine(false);
     }
 

@@ -5,6 +5,7 @@ import cc.wo66.qrbtf.Parameters;
 import cc.wo66.qrbtf.QRBtfUtil;
 import cc.wo66.qrbtf.Shape;
 import cc.wo66.qrbtf.filter.BinaryFilter;
+import cc.wo66.qrbtf.filter.ColorFilter;
 import cc.wo66.qrbtf.filter.ConBriFilter;
 import cc.wo66.qrbtf.filter.ImageFilter;
 import org.apache.commons.lang3.StringUtils;
@@ -92,7 +93,7 @@ public class BackgroundDraw {
             binaryImage = ImageFilter.create(image)
                     .filter(new ConBriFilter(parameters.getContrast(), parameters.getBrightness()))
                     .filter(new BinaryFilter())
-                    .outGray(null);
+                    .outGray();
         }
         // 像素风格 默认 33% 大小
         if (bgEnhance.contains(BackgroundEnhance.PIXEL)) {
@@ -111,6 +112,12 @@ public class BackgroundDraw {
                     }
                 }
             }
+        }
+        // 颜色滤镜
+        if (bgEnhance.contains(BackgroundEnhance.COLOR_FILTER)) {
+            ImageFilter.create(image)
+                    .filter(new ColorFilter(parameters.getCoverColorStyle()))
+                    .outColor(image, 255*parameters.getCoverOpacity()/100);
         }
 
     }

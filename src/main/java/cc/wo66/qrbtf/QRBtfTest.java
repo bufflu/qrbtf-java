@@ -1,5 +1,6 @@
 package cc.wo66.qrbtf;
 
+import cc.wo66.qrbtf.filter.ColorStyle;
 import cc.wo66.qrbtf.renderer.Renderer;
 import cc.wo66.qrbtf.renderer.RendererRect;
 import com.google.zxing.EncodeHintType;
@@ -51,6 +52,8 @@ public class QRBtfTest {
         Renderer renderer = Renderer.fillImage()
                 .adjust()
                 .backgroundImageBase64(bgBase64)
+                //.coverColorStyle(ColorStyle.PINK_STYLE)
+                //.coverOpacity(100)
                 .end();
         /*Renderer renderer = Renderer.image()
                 .adjust()

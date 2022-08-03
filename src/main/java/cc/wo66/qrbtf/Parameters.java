@@ -1,5 +1,6 @@
 package cc.wo66.qrbtf;
 
+import cc.wo66.qrbtf.filter.ColorStyle;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import lombok.Data;
 
@@ -136,12 +137,13 @@ public class Parameters {
 
     /**
      * 覆盖颜色
+     * @see ColorStyle
      */
-    private Color coverColor;
+    private int coverColorStyle;
 
     /**
      * 覆盖不透明度
      */
-    private int coverOpacity = 100;
+    private int coverOpacity = 10;
 
 }
